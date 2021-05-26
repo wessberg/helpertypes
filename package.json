@@ -8,7 +8,7 @@
 		"generate:all": "pnpm run generate:sandhog && pnpm run generate:changelog",
 		"clean": "rimraf dist",
 		"lint": "tsc --noEmit && eslint \"src/**/*.ts\" --color",
-		"prettier": "prettier --write '{src,test,documentation}/**/*.{js,ts,json,html,xml,css,md}'",
+		"prettier": "prettier --write '{src,documentation}/**/*.{js,ts,json,html,xml,css,md}'",
 		"prebuild": "pnpm run clean",
 		"build": "pnpm run prebuild && pnpm run tsc",
 		"prewatch": "pnpm run clean",
@@ -16,7 +16,7 @@
 		"tsc": "tsc -p tsconfig.build.json",
 		"preversion": "pnpm run lint && pnpm run build",
 		"version": "pnpm run preversion && pnpm run generate:all && git add .",
-		"release": "np --no-cleanup --no-yarn",
+		"release": "np --no-cleanup --no-yarn --no-tests",
 		"update:check": "pnpx npm-check-updates --dep dev,prod",
 		"update:commit": "pnpx npm-check-updates -u --dep dev,prod && pnpm update && pnpm install"
 	},
