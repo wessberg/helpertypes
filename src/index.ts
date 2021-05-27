@@ -4,6 +4,13 @@
 export type Nullable<T> = T | null | undefined;
 
 /**
+ * Makes all properties of T mutable
+ */
+export type Mutable<T> = {
+	-readonly [P in keyof T]: T[P];
+};
+
+/**
  * Picks the element type of the given iterable.
  * For example, for the given array literal type: ["foo", "bar", "baz"],
  * the type is "foo"|"bar"|"baz"
