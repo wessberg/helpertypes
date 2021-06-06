@@ -113,6 +113,11 @@ export type FirstParameter<T extends ArbitraryFunction> = GetFirst<Parameters<T>
  */
 export type LastParameter<T extends ArbitraryFunction> = GetLast<Parameters<T>>;
 
+export type UncapitalizeKeys<T> = {[Key in keyof T as Uncapitalize<string & Key>]: T[Key]};
+export type CapitalizeKeys<T> = {[Key in keyof T as Capitalize<string & Key>]: T[Key]};
+export type LowercaseKeys<T> = {[Key in keyof T as Lowercase<string & Key>]: T[Key]};
+export type UppercaseKeys<T> = {[Key in keyof T as Uppercase<string & Key>]: T[Key]};
+
 // Internal helpers
 type Prev<T extends number> = [
 	-1,
