@@ -1,3 +1,9 @@
+## [0.0.3](https://github.com/wessberg/helpertypes/compare/v0.0.2...v0.0.3) (2021-06-06)
+
+### Features
+
+- add helpers: UppercaseKeys, LowercaseKeys, CapitalizeKeys, UncapitalizeKeys ([6ce3bfd](https://github.com/wessberg/helpertypes/commit/6ce3bfdc99ab438d7d1000b18f7a9a717668b821))
+
 ## [0.0.2](https://github.com/wessberg/helpertypes/compare/v0.0.1...v0.0.2) (2021-05-27)
 
 ### Features
