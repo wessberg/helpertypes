@@ -78,6 +78,11 @@ export type PartialExcept<T, K extends keyof T> = Omit<Partial<T>, K> & Pick<T, 
 export type PartialDeepExcept<T, K extends keyof T> = Omit<PartialDeep<T>, K> & Pick<T, K>;
 
 /**
+ * Require all keys in T, except for the keys given in K
+ */
+export type RequiredExcept<T, K extends keyof T> = Omit<Required<T>, K> & Pick<T, K>;
+
+/**
  * An arbitrary Function that takes any amount of arguments and returns anything
  */
 export type ArbitraryFunction<ReturnType = unknown> = (...args: never[]) => ReturnType;
