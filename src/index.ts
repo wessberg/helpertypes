@@ -62,12 +62,16 @@ export type ObjectLookupTuple<T, MaxDepth extends number = 10, LookupRecordsInsi
 	[Key in keyof T]: CurrentDepth extends MaxDepth
 		? [Key]
 		: T[Key] extends IgnoredLookupValue
+		? [Key]
+		: T[Key] extends (infer El)[]
+		? LookupRecordsInsideArrays extends false
 			? [Key]
-			: T[Key] extends (infer El)[]
-				? LookupRecordsInsideArrays extends false ? [Key] : [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
-				: T[Key] extends readonly (infer El)[]
-					? LookupRecordsInsideArrays extends false ? [Key] : [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
-					: [Key] | [Key, ...ObjectLookupTuple<T[Key], MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>];
+			: [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
+		: T[Key] extends readonly (infer El)[]
+		? LookupRecordsInsideArrays extends false
+			? [Key]
+			: [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
+		: [Key] | [Key, ...ObjectLookupTuple<T[Key], MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>];
 }[keyof T];
 
 /**
@@ -355,4 +359,17 @@ export type Next<T extends number> = [
 /**
  * A type indicating something that shouldn't be traversed into when mapping over objects, lists, or other similar data structures
  */
-export type IgnoredLookupValue = string | number | bigint | symbol | boolean | undefined | null | Date | RegExp | Set<unknown> | WeakSet<never> | Map<unknown, unknown> | WeakMap<never, unknown>;
+export type IgnoredLookupValue =
+	| string
+	| number
+	| bigint
+	| symbol
+	| boolean
+	| undefined
+	| null
+	| Date
+	| RegExp
+	| Set<unknown>
+	| WeakSet<never>
+	| Map<unknown, unknown>
+	| WeakMap<never, unknown>;
