@@ -1,3 +1,12 @@
+## [0.0.7](https://github.com/wessberg/helpertypes/compare/v0.0.6...v0.0.7) (2021-09-02)
+
+
+### Features
+
+* add 'ObjectLookupTuple' helper type ([5263180](https://github.com/wessberg/helpertypes/commit/5263180332d55d628a8b6afc4daa3dcb79941a01))
+
+
+
 ## [0.0.6](https://github.com/wessberg/helpertypes/compare/v0.0.5...v0.0.6) (2021-09-02)
 
 
