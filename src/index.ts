@@ -63,8 +63,10 @@ export type ObjectLookupTuple<T, MaxDepth extends number = 10, LookupRecordsInsi
 		? [Key]
 		: T[Key] extends IgnoredLookupValue
 			? [Key]
-			: T[Key] extends (infer El)[]|readonly (infer El)[]
+			: T[Key] extends (infer El)[]
 				? LookupRecordsInsideArrays extends false ? [Key] : [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
+				: T[Key] extends readonly (infer El)[]
+					? LookupRecordsInsideArrays extends false ? [Key] : [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
 					: [Key] | [Key, ...ObjectLookupTuple<T[Key], MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>];
 }[keyof T];
 
