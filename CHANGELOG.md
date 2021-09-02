@@ -1,3 +1,12 @@
+## [0.0.8](https://github.com/wessberg/helpertypes/compare/v0.0.7...v0.0.8) (2021-09-02)
+
+
+### Bug Fixes
+
+* add support for readonly arrays in ObjectLookupTuple ([371a7ea](https://github.com/wessberg/helpertypes/commit/371a7ea2f414b8398ce52bd55ebd0fce00448bb7))
+
+
+
 ## [0.0.7](https://github.com/wessberg/helpertypes/compare/v0.0.6...v0.0.7) (2021-09-02)
 
 
