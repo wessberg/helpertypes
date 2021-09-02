@@ -1,3 +1,12 @@
+## [0.0.6](https://github.com/wessberg/helpertypes/compare/v0.0.5...v0.0.6) (2021-09-02)
+
+
+### Bug Fixes
+
+* include RegExp in as simple value in PartialDeep check ([aebe2d6](https://github.com/wessberg/helpertypes/commit/aebe2d687db6956cca27f7e9c30b0a2ee2e13a47))
+
+
+
 ## [0.0.5](https://github.com/wessberg/helpertypes/compare/v0.0.4...v0.0.5) (2021-09-02)
 
 
