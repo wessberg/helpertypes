@@ -53,6 +53,22 @@ export type PickMembersOfType<T, Type> = Pick<
 >;
 
 /**
+ * Builds up a lookup path into a record via tuple elements. For example, for the record `{ a: {b: {c: string}}}`, a valid value could be `["a", "b", "c"]`
+ * It takes as the second optional type argument the maximum depth it can recursively descent into the target object (default: 10).
+ * It takes as the third optional type argument whether or not to walk into arrays and allow looking up members of their records as part of the lookup path. For
+ * example, for the record `{a: {foo: string}[]}`, a value of true would allow for values like `["a", "foo"]`, even though 'foo' is part of a record within an arary
+ */
+export type ObjectLookupTuple<T, MaxDepth extends number = 10, LookupRecordsInsideArrays extends boolean = false, CurrentDepth extends number = 0> = {
+	[Key in keyof T]: CurrentDepth extends MaxDepth
+		? [Key]
+		: T[Key] extends IgnoredLookupValue
+			? [Key]
+			: T[Key] extends (infer El)[]|readonly (infer El)[]
+				? LookupRecordsInsideArrays extends false ? [Key] : [Key] | [Key, ...ObjectLookupTuple<El, MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>]
+					: [Key] | [Key, ...ObjectLookupTuple<T[Key], MaxDepth, LookupRecordsInsideArrays, Next<CurrentDepth>>];
+}[keyof T];
+
+/**
  * A variant of Partial that is deep.
  * This means that every value is a partial recursively
  * while still preserving primitive or built-in types as they are
@@ -62,7 +78,7 @@ export type PartialDeep<T> = {
 		? PartialDeep<ArrayElement>[]
 		: T[P] extends readonly (infer ReadonlyArrayElement)[]
 		? PartialDeep<ReadonlyArrayElement>[]
-		: T[P] extends string | number | bigint | symbol | boolean | undefined | null | Date | RegExp | Set<unknown> | WeakSet<never> | Map<unknown, unknown> | WeakMap<never, unknown>
+		: T[P] extends IgnoredLookupValue
 		? T[P]
 		: PartialDeep<T[P]>;
 };
@@ -333,3 +349,8 @@ export type Next<T extends number> = [
 	100,
 	101
 ][T];
+
+/**
+ * A type indicating something that shouldn't be traversed into when mapping over objects, lists, or other similar data structures
+ */
+export type IgnoredLookupValue = string | number | bigint | symbol | boolean | undefined | null | Date | RegExp | Set<unknown> | WeakSet<never> | Map<unknown, unknown> | WeakMap<never, unknown>
