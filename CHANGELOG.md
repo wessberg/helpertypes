@@ -1,3 +1,12 @@
+## [0.0.5](https://github.com/wessberg/helpertypes/compare/v0.0.4...v0.0.5) (2021-09-02)
+
+
+### Features
+
+* expose 'Prev' and 'Next' types ([2b365f8](https://github.com/wessberg/helpertypes/commit/2b365f88e6e65c47b93e137a1b62aa41c1c7d9e1))
+
+
+
 ## [0.0.4](https://github.com/wessberg/helpertypes/compare/v0.0.3...v0.0.4) (2021-08-22)
 
 
