@@ -62,7 +62,7 @@ export type PartialDeep<T> = {
 		? PartialDeep<ArrayElement>[]
 		: T[P] extends readonly (infer ReadonlyArrayElement)[]
 		? PartialDeep<ReadonlyArrayElement>[]
-		: T[P] extends string | number | bigint | symbol | boolean | undefined | null | Date | Set<unknown> | WeakSet<never> | Map<unknown, unknown> | WeakMap<never, unknown>
+		: T[P] extends string | number | bigint | symbol | boolean | undefined | null | Date | RegExp | Set<unknown> | WeakSet<never> | Map<unknown, unknown> | WeakMap<never, unknown>
 		? T[P]
 		: PartialDeep<T[P]>;
 };
