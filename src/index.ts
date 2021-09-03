@@ -119,11 +119,11 @@ export type RequiredExcept<T, K extends keyof T> = Omit<Required<T>, K> & Pick<T
 export type SplitRecord<T, U = T> = Exclude<
 	{
 		[Key in keyof T]: {
-		[K in Key]: K extends keyof U ? T[K] : never;
-	};
+			[K in Key]: K extends keyof U ? T[K] : never;
+		};
 	}[keyof T],
 	undefined
-	>;
+>;
 
 /**
  * An arbitrary Function that takes any amount of arguments and returns anything
