@@ -112,6 +112,20 @@ export type PartialDeepExcept<T, K extends keyof T> = Omit<PartialDeep<T>, K> & 
 export type RequiredExcept<T, K extends keyof T> = Omit<Required<T>, K> & Pick<T, K>;
 
 /**
+ * Splits a record into all of its possible property intersections.
+ * For example, for the record {a: 1; b: 2>}, splitting the record will
+ * get the type {a: 1} | {b: 2} back.
+ */
+export type SplitRecord<T, U = T> = Exclude<
+	{
+		[Key in keyof T]: {
+		[K in Key]: K extends keyof U ? T[K] : never;
+	};
+	}[keyof T],
+	undefined
+	>;
+
+/**
  * An arbitrary Function that takes any amount of arguments and returns anything
  */
 export type ArbitraryFunction<ReturnType = unknown> = (...args: never[]) => ReturnType;
