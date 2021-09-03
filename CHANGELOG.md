@@ -1,3 +1,13 @@
+## [0.0.10](https://github.com/wessberg/helpertypes/compare/v0.0.9...v0.0.10) (2021-09-03)
+
+
+### Features
+
+* add 'SplitRecord' ([465563b](https://github.com/wessberg/helpertypes/commit/465563bb68fc0f98884417759ef8e30d9d113d29))
+* add 'SplitRecord' ([0a3fce3](https://github.com/wessberg/helpertypes/commit/0a3fce3a6dd0d7946050ff6c90d35d7cbabb1531))
+
+
+
 ## [0.0.9](https://github.com/wessberg/helpertypes/compare/v0.0.8...v0.0.9) (2021-09-03)
 
 
