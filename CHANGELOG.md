@@ -1,3 +1,12 @@
+## [0.0.9](https://github.com/wessberg/helpertypes/compare/v0.0.8...v0.0.9) (2021-09-03)
+
+
+### Features
+
+* add 'ArrayPiercingObjectLookupTuple' ([8ef5a03](https://github.com/wessberg/helpertypes/commit/8ef5a03552b6f446c2759eefce631b02487985e9))
+
+
+
 ## [0.0.8](https://github.com/wessberg/helpertypes/compare/v0.0.7...v0.0.8) (2021-09-02)
 
 
