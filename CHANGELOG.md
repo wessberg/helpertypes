@@ -1,3 +1,12 @@
+## [0.0.11](https://github.com/wessberg/helpertypes/compare/v0.0.10...v0.0.11) (2021-09-06)
+
+
+### Bug Fixes
+
+* add Function to ignored types in PartialDeep ([ee8d6f2](https://github.com/wessberg/helpertypes/commit/ee8d6f24f15d81d5870ff20384d42ccc0a7aff6d))
+
+
+
 ## [0.0.10](https://github.com/wessberg/helpertypes/compare/v0.0.9...v0.0.10) (2021-09-03)
 
 
