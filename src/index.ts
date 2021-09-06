@@ -390,6 +390,7 @@ export type IgnoredLookupValue =
 	| null
 	| Date
 	| RegExp
+	| Function
 	| Set<unknown>
 	| WeakSet<never>
 	| Map<unknown, unknown>
