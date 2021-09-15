@@ -1,6 +1,6 @@
 {
 	"name": "helpertypes",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "A collection of TypeScript helper types",
 	"scripts": {
 		"generate:sandhog": "sandhog all --yes",

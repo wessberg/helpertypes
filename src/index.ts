@@ -419,6 +419,7 @@ export type IgnoredLookupValue =
 	| null
 	| Date
 	| RegExp
+	| CallableFunction
 	| Set<unknown>
 	| WeakSet<never>
 	| Map<unknown, unknown>
