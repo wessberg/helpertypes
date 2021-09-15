@@ -1,3 +1,12 @@
+## [0.0.12](https://github.com/wessberg/helpertypes/compare/v0.0.11...v0.0.12) (2021-09-15)
+
+
+### Features
+
+* add additional helper types ([7a6eb8e](https://github.com/wessberg/helpertypes/commit/7a6eb8ed4b9aced393a3825880f6a93dc3464c06))
+
+
+
 ## [0.0.11](https://github.com/wessberg/helpertypes/compare/v0.0.10...v0.0.11) (2021-09-06)
 
 
