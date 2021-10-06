@@ -68,6 +68,20 @@ export type PickRequired<T> = Pick<
 	>
 >;
 
+
+/**
+ * Picks those keys from A that intersects with those from B
+ */
+ export type PickIntersectingKeys<A, B> = Pick<
+ A,
+ Exclude<
+	 {
+		 [Key in keyof A]: Key extends keyof B ? Key : never;
+	 }[keyof A],
+	 undefined
+ >
+>;
+
 /**
  * Picks from T the properties for which their type matches Type
  */
