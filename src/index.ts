@@ -43,6 +43,32 @@ export type RequiredValues<T> = {
 };
 
 /**
+ * Picks only keys for which there is an optional modifier
+ */
+export type PickOptional<T> = Pick<
+	T,
+	Exclude<
+		{
+			[K in keyof T]: T extends Record<K, T[K]> ? never : K;
+		}[keyof T],
+		undefined
+	>
+>;
+
+/**
+ * Picks only keys for which there is no optional modifier
+ */
+export type PickRequired<T> = Pick<
+	T,
+	Exclude<
+		{
+			[K in keyof T]: T extends Record<K, T[K]> ? K : never;
+		}[keyof T],
+		undefined
+	>
+>;
+
+/**
  * Picks from T the properties for which their type matches Type
  */
 export type PickMembersOfType<T, Type> = Pick<
