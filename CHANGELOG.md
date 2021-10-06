@@ -1,3 +1,12 @@
+## [0.0.13](https://github.com/wessberg/helpertypes/compare/v0.0.12...v0.0.13) (2021-10-06)
+
+
+### Features
+
+* add new helper types: PickOptional and PickRequired ([1a9d2eb](https://github.com/wessberg/helpertypes/commit/1a9d2ebd96665749ebb75b48427d143f0eb4ece0))
+
+
+
 ## [0.0.12](https://github.com/wessberg/helpertypes/compare/v0.0.11...v0.0.12) (2021-09-15)
 
 
