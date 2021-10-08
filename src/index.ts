@@ -132,7 +132,7 @@ export type ArrayPiercingObjectLookupTuple<T, MaxDepth extends number = 10, Curr
  * This means that every value is a partial recursively
  * while still preserving primitive or built-in types as they are
  */
- type PartialDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
+ export type PartialDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
  ? T
  : T extends IgnoredLookupValue
  ? T
