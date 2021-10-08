@@ -132,50 +132,34 @@ export type ArrayPiercingObjectLookupTuple<T, MaxDepth extends number = 10, Curr
  * This means that every value is a partial recursively
  * while still preserving primitive or built-in types as they are
  */
- export type PartialDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = { [P in keyof T]?: PartialDeepValue<T[P], MaxDepth, Next<CurrentDepth>> };
+ type PartialDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
+ ? T
+ : T extends IgnoredLookupValue
+ ? T
+ : T extends (infer ArrayElement)[]
+ ? PartialDeep<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
+ : T extends readonly (infer ReadonlyArrayElement)[]
+ ? readonly PartialDeep<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
+ : T extends Iterable<infer IterableType>
+ ? Iterable<PartialDeep<IterableType, MaxDepth, Next<CurrentDepth>>>
+ : {[P in keyof T]?: PartialDeep<T[P], MaxDepth, Next<CurrentDepth>>;};
 
- type PartialDeepValue<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
-	 ? T
-	 : T extends IgnoredLookupValue
-	 ? T
-	 : T extends (infer ArrayElement)[]
-	 ? PartialDeepValue<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
-	 : T extends readonly (infer ReadonlyArrayElement)[]
-	 ? readonly PartialDeepValue<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
-	 : T extends Iterable<infer IterableType>
-	 ? Iterable<PartialDeepValue<IterableType, MaxDepth, Next<CurrentDepth>>>
-	 : T extends infer NotNullableType1 | undefined
-	 ? PartialDeepValue<NotNullableType1, MaxDepth, Next<CurrentDepth>> | undefined
-	 : T extends infer NotNullableType2 | null
-	 ? PartialDeepValue<NotNullableType2, MaxDepth, Next<CurrentDepth>> | null
-	 : T extends infer NotNullableType3 | undefined | null
-	 ? PartialDeepValue<NotNullableType3, MaxDepth, Next<CurrentDepth>> | undefined | null
-	 : PartialDeep<T, MaxDepth, Next<CurrentDepth>>;
- 
- /**
-  * A variant of Required that is deep.
-  * This means that every key is required recursively
-  * while still preserving primitive or built-in types as they are
-  */
-  export type RequiredDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = { [P in keyof T]-?: RequiredDeepValue<T[P], MaxDepth, Next<CurrentDepth>> };
- 
-  type RequiredDeepValue<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
-	  ? T
-	  : T extends IgnoredLookupValue
-	  ? T
-	  : T extends (infer ArrayElement)[]
-	  ? RequiredDeepValue<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
-	  : T extends readonly (infer ReadonlyArrayElement)[]
-	  ? readonly RequiredDeepValue<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
-	  : T extends Iterable<infer IterableType>
-	  ? Iterable<RequiredDeepValue<IterableType, MaxDepth, Next<CurrentDepth>>>
-	  : T extends infer NotNullableType1 | undefined
-	  ? RequiredDeepValue<NotNullableType1, MaxDepth, Next<CurrentDepth>> | undefined
-	  : T extends infer NotNullableType2 | null
-	  ? RequiredDeepValue<NotNullableType2, MaxDepth, Next<CurrentDepth>> | null
-	  : T extends infer NotNullableType3 | undefined | null
-	  ? RequiredDeepValue<NotNullableType3, MaxDepth, Next<CurrentDepth>> | undefined | null
-	  : RequiredDeep<T, MaxDepth, Next<CurrentDepth>>;
+/**
+* A variant of Required that is deep.
+* This means that every key is required recursively
+* while still preserving primitive or built-in types as they are
+*/
+export type RequiredDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
+ ? T
+ : T extends IgnoredLookupValue
+ ? T
+ : T extends (infer ArrayElement)[]
+ ? RequiredDeep<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
+ : T extends readonly (infer ReadonlyArrayElement)[]
+ ? readonly RequiredDeep<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
+ : T extends Iterable<infer IterableType>
+ ? Iterable<RequiredDeep<IterableType, MaxDepth, Next<CurrentDepth>>>
+ : { [P in keyof T]-?: RequiredDeep<T[P], MaxDepth, Next<CurrentDepth>> };
 
 /**
  * A partial of T except for the keys given in K
