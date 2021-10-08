@@ -1,3 +1,12 @@
+## [0.0.16](https://github.com/wessberg/helpertypes/compare/v0.0.15...v0.0.16) (2021-10-08)
+
+
+### Bug Fixes
+
+* yet another fix of RequiredDeep and PartialDeep ([df959c6](https://github.com/wessberg/helpertypes/commit/df959c6d22bb71b0fc9599b82b1bb17a1866126c))
+
+
+
 ## [0.0.15](https://github.com/wessberg/helpertypes/compare/v0.0.14...v0.0.15) (2021-10-08)
 
 
