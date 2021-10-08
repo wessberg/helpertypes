@@ -68,18 +68,17 @@ export type PickRequired<T> = Pick<
 	>
 >;
 
-
 /**
  * Picks those keys from A that intersects with those from B
  */
- export type PickIntersectingKeys<A, B> = Pick<
- A,
- Exclude<
-	 {
-		 [Key in keyof A]: Key extends keyof B ? Key : never;
-	 }[keyof A],
-	 undefined
- >
+export type PickIntersectingKeys<A, B> = Pick<
+	A,
+	Exclude<
+		{
+			[Key in keyof A]: Key extends keyof B ? Key : never;
+		}[keyof A],
+		undefined
+	>
 >;
 
 /**
@@ -95,9 +94,9 @@ export type PickMembersOfType<T, Type> = Pick<
 export type PickMembersOfNotOfType<T, Type> = Pick<
 	T,
 	{
-		[Key in keyof T]: T[Key] extends Type ? never : T[Key] extends Type|undefined ? never : Key;
+		[Key in keyof T]: T[Key] extends Type ? never : T[Key] extends Type | undefined ? never : Key;
 	}[keyof T]
-	>;
+>;
 
 /**
  * Builds up a lookup path into a record via tuple elements. For example, for the record `{ a: {b: {c: string}}}`, a valid value could be `["a", "b", "c"]`
@@ -134,14 +133,45 @@ export type ArrayPiercingObjectLookupTuple<T, MaxDepth extends number = 10, Curr
  * while still preserving primitive or built-in types as they are
  */
 export type PartialDeep<T> = {
-	[P in keyof T]?: T[P] extends (infer ArrayElement)[]
-		? PartialDeep<ArrayElement>[]
-		: T[P] extends readonly (infer ReadonlyArrayElement)[]
-		? PartialDeep<ReadonlyArrayElement>[]
-		: T[P] extends IgnoredLookupValue
-		? T[P]
-		: PartialDeep<T[P]>;
+	[P in keyof T]?: PartialDeepImpl<T[P]>;
 };
+
+type PartialDeepImpl<T> = T extends IgnoredLookupValue
+	? T
+	: T extends (infer ArrayElement)[]
+	? PartialDeep<ArrayElement>[]
+	: T extends readonly (infer ReadonlyArrayElement)[]
+	? readonly PartialDeep<ReadonlyArrayElement>[]
+	: T extends infer NotNullableType1 | undefined
+	? PartialDeep<NotNullableType1> | undefined
+	: T extends infer NotNullableType2 | null
+	? PartialDeep<NotNullableType2> | null
+	: T extends infer NotNullableType3 | undefined | null
+	? PartialDeep<NotNullableType3> | undefined | null
+	: PartialDeep<T>;
+
+/**
+ * A variant of Required that is deep.
+ * This means that every key is required recursively
+ * while still preserving primitive or built-in types as they are
+ */
+ export type RequiredDeep<T> = {
+	[P in keyof T]-?: RequiredDeepImpl<T[P]>;
+};
+
+type RequiredDeepImpl<T> = T extends IgnoredLookupValue
+	? T
+	: T extends (infer ArrayElement)[]
+	? RequiredDeep<ArrayElement>[]
+	: T extends readonly (infer ReadonlyArrayElement)[]
+	? readonly RequiredDeep<ReadonlyArrayElement>[]
+	: T extends infer NotNullableType1 | undefined
+	? RequiredDeep<NotNullableType1> | undefined
+	: T extends infer NotNullableType2 | null
+	? RequiredDeep<NotNullableType2> | null
+	: T extends infer NotNullableType3 | undefined | null
+	? RequiredDeep<NotNullableType3> | undefined | null
+	: RequiredDeep<T>;
 
 /**
  * A partial of T except for the keys given in K
@@ -176,18 +206,32 @@ export type SplitRecord<T, U = T> = Exclude<
  * A variant of `SplitRecord` that includes all similar keys.
  * See the documentation for `SimilarObjectKeys` for more details.
  */
-export type SplitRecordWithSimilarKeys<T, U = T> = Exclude<{
-	[Key in keyof T]: Key extends keyof U ? SimilarObjectKeys<T, Key & string> : never
-}[keyof T], undefined>;
+export type SplitRecordWithSimilarKeys<T, U = T> = Exclude<
+	{
+		[Key in keyof T]: Key extends keyof U ? SimilarObjectKeys<T, Key & string> : never;
+	}[keyof T],
+	undefined
+>;
 
 /**
  * Selects only the properties from an object for which the keys include the substring(s) given in U.
  * For example, for the object {foo: 1, fooBar: 2, barFoo: 3, baz: 4}, a value of "foo" for U will return an object with only the keys "foo", "fooBar", and "barFoo"
  */
-export type SimilarObjectKeys<T, U extends keyof T & string> = PickMembersOfNotOfType<{
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	[TKey in keyof T]: TKey extends U ? T[TKey] : TKey extends `${infer _Prefix}${Capitalize<U>}` ? T[TKey]|undefined : TKey extends `${infer _Prefix}${U}` ? T[TKey]|undefined : TKey extends `${U}${infer _Suffix}` ? T[TKey]|undefined : never
-}, never>;
+export type SimilarObjectKeys<T, U extends keyof T & string> = PickMembersOfNotOfType<
+	{
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		[TKey in keyof T]: TKey extends U
+			? T[TKey]
+			: TKey extends `${infer _Prefix}${Capitalize<U>}`
+			? T[TKey] | undefined
+			: TKey extends `${infer _Prefix}${U}`
+			? T[TKey] | undefined
+			: TKey extends `${U}${infer _Suffix}`
+			? T[TKey] | undefined
+			: never;
+	},
+	never
+>;
 
 /**
  * An arbitrary Function that takes any amount of arguments and returns anything
@@ -230,8 +274,8 @@ export type CapitalizeKeys<T> = {[Key in keyof T as Capitalize<string & Key>]: T
 export type LowercaseKeys<T> = {[Key in keyof T as Lowercase<string & Key>]: T[Key]};
 export type UppercaseKeys<T> = {[Key in keyof T as Uppercase<string & Key>]: T[Key]};
 
-export type PrefixObjectKeys<T, Prefix extends string, EnsureCamelCase = false> = { [Key in keyof T as SuffixKey<Key & string, Prefix, EnsureCamelCase>]: T[Key] };
-export type SuffixObjectKeys<T, Suffix extends string, EnsureCamelCase = false> = { [Key in keyof T as PrefixKey<Key & string, Suffix, EnsureCamelCase>]: T[Key] };
+export type PrefixObjectKeys<T, Prefix extends string, EnsureCamelCase = false> = {[Key in keyof T as SuffixKey<Key & string, Prefix, EnsureCamelCase>]: T[Key]};
+export type SuffixObjectKeys<T, Suffix extends string, EnsureCamelCase = false> = {[Key in keyof T as PrefixKey<Key & string, Suffix, EnsureCamelCase>]: T[Key]};
 export type PrefixKey<T extends string, Prefix extends string, EnsureCamelCase = false> = `${Prefix}${EnsureCamelCase extends true ? Capitalize<T> : T}`;
 export type SuffixKey<T extends string, Suffix extends string, EnsureCamelCase = false> = `${T}${EnsureCamelCase extends true ? Capitalize<Suffix> : Suffix}`;
 
