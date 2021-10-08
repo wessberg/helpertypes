@@ -1,3 +1,12 @@
+## [0.0.15](https://github.com/wessberg/helpertypes/compare/v0.0.14...v0.0.15) (2021-10-08)
+
+
+### Bug Fixes
+
+* fix behavior of Next type ([e918ac1](https://github.com/wessberg/helpertypes/commit/e918ac1e659729eab32af0ea893ec2082de31967))
+
+
+
 ## [0.0.14](https://github.com/wessberg/helpertypes/compare/v0.0.13...v0.0.14) (2021-10-08)
 
 
