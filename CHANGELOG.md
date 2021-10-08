@@ -1,3 +1,13 @@
+## [0.0.14](https://github.com/wessberg/helpertypes/compare/v0.0.13...v0.0.14) (2021-10-08)
+
+
+### Features
+
+* add helper: PickIntersectingKeys ([6ff5552](https://github.com/wessberg/helpertypes/commit/6ff55521681311dc2fb20d0e298e2e623f7ab5d1))
+* add new helper: RequiredDeep ([cb12d71](https://github.com/wessberg/helpertypes/commit/cb12d71de7c46932b7d2a66936b9b30cc5e60a02))
+
+
+
 ## [0.0.13](https://github.com/wessberg/helpertypes/compare/v0.0.12...v0.0.13) (2021-10-06)
 
 
