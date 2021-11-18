@@ -1,3 +1,12 @@
+## [0.0.18](https://github.com/wessberg/helpertypes/compare/v0.0.17...v0.0.18) (2021-11-18)
+
+
+### Bug Fixes
+
+* replace implementation of ObjectLookupTitle with one less prone to exceeding allowed recursive calls ([171d7fe](https://github.com/wessberg/helpertypes/commit/171d7fe129f74ce32c140c438d6fc3a7bcb7ce45))
+
+
+
 ## [0.0.17](https://github.com/wessberg/helpertypes/compare/v0.0.16...v0.0.17) (2021-10-08)
 
 
