@@ -103,28 +103,30 @@ export type PickMembersOfNotOfType<T, Type> = Pick<
  * It takes as the second optional type argument the maximum depth it can recursively descent into the target object (default: 10).
  * When an Array is discovered, indexes into the array can be provided. For example, for the record `{a: {foo: string}[]}`, a value like `["a", 0, "foo"]` is allowed.
  */
-export type ObjectLookupTuple<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = {
-	[Key in keyof T]: CurrentDepth extends MaxDepth
-		? [Key]
-		: T[Key] extends IgnoredLookupValue
-		? [Key]
-		: T[Key] extends (infer El)[] | readonly (infer El)[]
-		? [Key] | [Key, keyof T[Key], ...ObjectLookupTuple<El, MaxDepth, Next<CurrentDepth>>]
-		: [Key] | [Key, ...ObjectLookupTuple<T[Key], MaxDepth, Next<CurrentDepth>>];
-}[keyof T];
+ export type ObjectLookupTuple<T, MaxDepth extends number = 10> = ObjectLookupTupleHelper<T, [], MaxDepth>;
+ type ObjectLookupTupleHelper<T, Acc extends PropertyKey[], MaxDepth extends number, CurrentDepth extends number = 0> = {
+	 [Key in keyof T]: CurrentDepth extends MaxDepth
+		 ? [...Acc, Key]
+		 : T[Key] extends IgnoredLookupValue
+		 ? [...Acc, Key]
+		 : T[Key] extends (infer El)[] | readonly (infer El)[]
+		 ? [...Acc, Key] | ObjectLookupTupleHelper<El, [...Acc, Key, number], MaxDepth, Next<CurrentDepth>>
+		 : [...Acc, Key] | ObjectLookupTupleHelper<NonNullable<T[Key]>, [...Acc, Key, number], MaxDepth, Next<CurrentDepth>>;
+ }[keyof T];
 
 /**
  * A variant of ObjectLookupTuple that will walk into arrays and allow looking up members of their records as part of the lookup path. For
  * example, for the record `{a: {foo: string}[]}`, a value like `["a", "foo"]` is allowed, even though 'foo' is part of a record within an array
  */
-export type ArrayPiercingObjectLookupTuple<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = {
+export type ArrayPiercingObjectLookupTuple<T, MaxDepth extends number = 10> = ArrayPiercingObjectLookupTupleHelper<T, [], MaxDepth>;
+type ArrayPiercingObjectLookupTupleHelper<T, Acc extends PropertyKey[], MaxDepth extends number, CurrentDepth extends number = 0> = {
 	[Key in keyof T]: CurrentDepth extends MaxDepth
-		? [Key]
+		? [...Acc, Key]
 		: T[Key] extends IgnoredLookupValue
-		? [Key]
+		? [...Acc, Key]
 		: T[Key] extends (infer El)[] | readonly (infer El)[]
-		? [Key] | [Key, ...ArrayPiercingObjectLookupTuple<El, MaxDepth, Next<CurrentDepth>>]
-		: [Key] | [Key, ...ArrayPiercingObjectLookupTuple<T[Key], MaxDepth, Next<CurrentDepth>>];
+		? [...Acc, Key] | ArrayPiercingObjectLookupTupleHelper<El, [...Acc, Key], MaxDepth, Next<CurrentDepth>>
+		: [...Acc, Key] | ArrayPiercingObjectLookupTupleHelper<NonNullable<T[Key]>, [...Acc, Key], MaxDepth, Next<CurrentDepth>>;
 }[keyof T];
 
 /**
