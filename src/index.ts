@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Makes T a union of T, null, and undefined
  */
@@ -103,16 +104,16 @@ export type PickMembersOfNotOfType<T, Type> = Pick<
  * It takes as the second optional type argument the maximum depth it can recursively descent into the target object (default: 10).
  * When an Array is discovered, indexes into the array can be provided. For example, for the record `{a: {foo: string}[]}`, a value like `["a", 0, "foo"]` is allowed.
  */
- export type ObjectLookupTuple<T, MaxDepth extends number = 10> = ObjectLookupTupleHelper<T, [], MaxDepth>;
- type ObjectLookupTupleHelper<T, Acc extends PropertyKey[], MaxDepth extends number, CurrentDepth extends number = 0> = {
-	 [Key in keyof T]: CurrentDepth extends MaxDepth
-		 ? [...Acc, Key]
-		 : T[Key] extends IgnoredLookupValue
-		 ? [...Acc, Key]
-		 : T[Key] extends (infer El)[] | readonly (infer El)[]
-		 ? [...Acc, Key] | ObjectLookupTupleHelper<El, [...Acc, Key, number], MaxDepth, Next<CurrentDepth>>
-		 : [...Acc, Key] | ObjectLookupTupleHelper<NonNullable<T[Key]>, [...Acc, Key, number], MaxDepth, Next<CurrentDepth>>;
- }[keyof T];
+export type ObjectLookupTuple<T, MaxDepth extends number = 10> = ObjectLookupTupleHelper<T, [], MaxDepth>;
+type ObjectLookupTupleHelper<T, Acc extends PropertyKey[], MaxDepth extends number, CurrentDepth extends number = 0> = {
+	[Key in keyof T]: CurrentDepth extends MaxDepth
+		? [...Acc, Key]
+		: T[Key] extends IgnoredLookupValue
+		? [...Acc, Key]
+		: T[Key] extends (infer El)[] | readonly (infer El)[]
+		? [...Acc, Key] | ObjectLookupTupleHelper<El, [...Acc, Key, number], MaxDepth, Next<CurrentDepth>>
+		: [...Acc, Key] | ObjectLookupTupleHelper<NonNullable<T[Key]>, [...Acc, Key, number], MaxDepth, Next<CurrentDepth>>;
+}[keyof T];
 
 /**
  * A variant of ObjectLookupTuple that will walk into arrays and allow looking up members of their records as part of the lookup path. For
@@ -130,38 +131,59 @@ type ArrayPiercingObjectLookupTupleHelper<T, Acc extends PropertyKey[], MaxDepth
 }[keyof T];
 
 /**
+ * Behaves similar to ObjectLookupTuple, but builds up strings that dot into objects. For example, for the record `{ a: {b: {c: string}}}`, a valid value could be `a.b.c`
+ */
+export type ObjectLookupString<T, MaxDepth extends number = 10, StopAtArrays extends boolean = false> = ObjectLookupStringHelper<T, ``, MaxDepth, 0, StopAtArrays>;
+type MaybeSuffixWithDot<T extends string> = T extends `` ? T : `${T}.`;
+type ObjectLookupStringHelper<T, Acc extends string, MaxDepth extends number, CurrentDepth extends number = 0, StopAtArrays extends boolean = false> = {
+	[Key in keyof T]: Key extends string
+		? CurrentDepth extends MaxDepth
+			? `${MaybeSuffixWithDot<Acc>}${Key}`
+			: T[Key] extends IgnoredLookupValue
+			? `${MaybeSuffixWithDot<Acc>}${Key}`
+			: T[Key] extends (infer El)[] | readonly (infer El)[]
+			? StopAtArrays extends true
+				? `${MaybeSuffixWithDot<Acc>}${Key}`
+				: `${MaybeSuffixWithDot<Acc>}${Key}.${number}` | El extends IgnoredLookupValue
+				? `${MaybeSuffixWithDot<Acc>}${Key}.${number}`
+				: ObjectLookupStringHelper<El, `${MaybeSuffixWithDot<Acc>}${Key}.${number}`, MaxDepth, Next<CurrentDepth>, StopAtArrays>
+			: `${MaybeSuffixWithDot<Acc>}${Key}` | ObjectLookupStringHelper<NonNullable<T[Key]>, `${MaybeSuffixWithDot<Acc>}${Key}`, MaxDepth, Next<CurrentDepth>, StopAtArrays>
+		: never;
+}[keyof T];
+
+/**
  * A variant of Partial that is deep.
  * This means that every value is a partial recursively
  * while still preserving primitive or built-in types as they are
  */
- export type PartialDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
- ? T
- : T extends IgnoredLookupValue
- ? T
- : T extends (infer ArrayElement)[]
- ? PartialDeep<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
- : T extends readonly (infer ReadonlyArrayElement)[]
- ? readonly PartialDeep<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
- : T extends Iterable<infer IterableType>
- ? Iterable<PartialDeep<IterableType, MaxDepth, Next<CurrentDepth>>>
- : {[P in keyof T]?: PartialDeep<T[P], MaxDepth, Next<CurrentDepth>>;};
+export type PartialDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
+	? T
+	: T extends IgnoredLookupValue
+	? T
+	: T extends (infer ArrayElement)[]
+	? PartialDeep<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
+	: T extends readonly (infer ReadonlyArrayElement)[]
+	? readonly PartialDeep<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
+	: T extends Iterable<infer IterableType>
+	? Iterable<PartialDeep<IterableType, MaxDepth, Next<CurrentDepth>>>
+	: {[P in keyof T]?: PartialDeep<T[P], MaxDepth, Next<CurrentDepth>>};
 
 /**
-* A variant of Required that is deep.
-* This means that every key is required recursively
-* while still preserving primitive or built-in types as they are
-*/
+ * A variant of Required that is deep.
+ * This means that every key is required recursively
+ * while still preserving primitive or built-in types as they are
+ */
 export type RequiredDeep<T, MaxDepth extends number = 10, CurrentDepth extends number = 0> = CurrentDepth extends MaxDepth
- ? T
- : T extends IgnoredLookupValue
- ? T
- : T extends (infer ArrayElement)[]
- ? RequiredDeep<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
- : T extends readonly (infer ReadonlyArrayElement)[]
- ? readonly RequiredDeep<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
- : T extends Iterable<infer IterableType>
- ? Iterable<RequiredDeep<IterableType, MaxDepth, Next<CurrentDepth>>>
- : { [P in keyof T]-?: RequiredDeep<T[P], MaxDepth, Next<CurrentDepth>> };
+	? T
+	: T extends IgnoredLookupValue
+	? T
+	: T extends (infer ArrayElement)[]
+	? RequiredDeep<ArrayElement, MaxDepth, Next<CurrentDepth>>[]
+	: T extends readonly (infer ReadonlyArrayElement)[]
+	? readonly RequiredDeep<ReadonlyArrayElement, MaxDepth, Next<CurrentDepth>>[]
+	: T extends Iterable<infer IterableType>
+	? Iterable<RequiredDeep<IterableType, MaxDepth, Next<CurrentDepth>>>
+	: {[P in keyof T]-?: RequiredDeep<T[P], MaxDepth, Next<CurrentDepth>>};
 
 /**
  * A partial of T except for the keys given in K
@@ -209,7 +231,6 @@ export type SplitRecordWithSimilarKeys<T, U = T> = Exclude<
  */
 export type SimilarObjectKeys<T, U extends keyof T & string> = PickMembersOfNotOfType<
 	{
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		[TKey in keyof T]: TKey extends U
 			? T[TKey]
 			: TKey extends `${infer _Prefix}${Capitalize<U>}`
