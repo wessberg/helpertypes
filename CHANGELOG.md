@@ -1,3 +1,12 @@
+## [0.0.19](https://github.com/wessberg/helpertypes/compare/v0.0.18...v0.0.19) (2022-11-09)
+
+
+### Features
+
+* add ObjectLookupString helper type ([4a19d76](https://github.com/wessberg/helpertypes/commit/4a19d76c009fa4d1648c8255e2ffcb7cfe5fe56a))
+
+
+
 ## [0.0.18](https://github.com/wessberg/helpertypes/compare/v0.0.17...v0.0.18) (2021-11-18)
 
 
